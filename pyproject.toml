@@ -2,7 +2,7 @@
 name = "validation-service"
 version = "1.0.0"
 description = ""
-authors = ["Matvei Stepin [email: matveystepin07@gmail.com]"]
+authors = ["Matvei Stepin <matveystepin07@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
