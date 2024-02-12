@@ -9,7 +9,7 @@ log = logging.getLogger()
 class ValidationUseCase(ValidationUseCaseInterface):
 
     def validate(self, data: str) -> bool:
-        log.debug(f"Validating string: %s", data)
+        log.debug(f"Validating string: {data}")
 
         try:
             result = self.__apply_model(data=data)
@@ -18,7 +18,7 @@ class ValidationUseCase(ValidationUseCaseInterface):
 
         return result
 
-    def __apply_model(self, data: str):
+    def __apply_model(self, data: str) -> bool:
         return len(data.split()) % 2 == 1
 
 

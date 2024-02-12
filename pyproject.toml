@@ -12,6 +12,34 @@ uvicorn = "^0.27.0.post1"
 python-dotenv = "^1.0.1"
 pydantic-settings = "^2.1.0"
 
+[tool.poetry.group.dev.dependencies]
+pytest-asyncio = "^0.21.1"
+flake8 = "^7.0.0"
+mypy = "^1.8.0"
+black = "^24.1.1"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+log_level = "info"
+
+[tool.mypy]
+mypy_path = "stub"
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+files = ["src", "tests"]
+follow_imports = "silent"
+strict_optional = true
+warn_no_return = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = ["src.user_interface.http.app"]
+disable_error_code = ["arg-type"]
 
 [build-system]
 requires = ["poetry-core"]

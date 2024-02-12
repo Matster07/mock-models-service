@@ -9,4 +9,3 @@ class ValidationUseCaseInterface(ABC):
     @abstractmethod
     def validate(self, data: str) -> bool:
         pass
-

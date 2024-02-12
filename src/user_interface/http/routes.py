@@ -20,14 +20,19 @@ class ValidationRequestDto(BaseModel):
     data: str
 
 
-@router.post("/text/validate", response_model=ValidationResponseDto)
+@router.post(
+    path="/text/validate",
+    response_model=ValidationResponseDto,
+    tags=["Text Validation Controller"],
+    description="Endpoint для проверки строки при помощи заданной модели."
+)
 async def apply(
-        data: ValidationRequestDto,
-        use_case: ValidationUseCaseInterface = Depends(get_validation_use_case)
+    data: ValidationRequestDto,
+    use_case: ValidationUseCaseInterface = Depends(get_validation_use_case),
 ) -> ValidationResponseDto:
-    log.debug(f"Received request to validate string: %s", data.data)
+    log.debug(f"Received request to validate string: {data.data}", data.data)
 
     result = use_case.validate(data=data.data)
-    log.info(f"Result of applying model to string: %s - %s", data, result)
+    log.info(f"Result of applying model to string: {data.data} - {result}")
 
     return ValidationResponseDto(result=result)

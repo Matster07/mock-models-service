@@ -15,7 +15,11 @@ class BadDefaultFastApiLogNameFilter(Filter):
 
 logging_config: dict = {
     "version": 1,
-    "filters": {"default.fastapi.log.name.filter": {"()": lambda: BadDefaultFastApiLogNameFilter()}},
+    "filters": {
+        "default.fastapi.log.name.filter": {
+            "()": lambda: BadDefaultFastApiLogNameFilter()
+        }
+    },
     "formatters": {
         "basic": {
             "format": FORMAT,
@@ -32,7 +36,6 @@ logging_config: dict = {
         "handlers": ["console"],
         "level": get_settings().LOG_LEVEL,
         "propagate": False,
-
     },
     "loggers": {
         "uvicorn.access": {

@@ -4,8 +4,6 @@ ENV PYTHONFAULTHANDLER=1 \
     PYTHONHASHSEED=random \
     PYTHONUNBUFFERED=1
 
-RUN mkdir app
-
 WORKDIR /app
 
 FROM base as builder
@@ -15,23 +13,27 @@ ENV PIP_DEFAULT_TIMEOUT=100 \
     PIP_NO_CACHE_DIR=1 \
     POETRY_VERSION=1.7.1
 
-RUN pip install "poetry==$POETRY_VERSION"
+RUN pip install --upgrade pip \
+    && pip install "poetry==$POETRY_VERSION"
 
-COPY test.py pyproject.toml poetry.lock README.md ./
-# if your project is stored in src, uncomment line below
+COPY ["pyproject.toml", "poetry.lock", "README.md", "./"]
+COPY .env /app/
+
+RUN poetry config virtualenvs.create true \
+    && poetry install --only main
+
+# Production Image
+FROM builder as production
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONPATH=/app/
+
 COPY src ./src
-# or this if your file is stored in $PROJECT_NAME, assuming `myproject`
-# COPY myproject ./myproject
-RUN poetry config virtualenvs.in-project true && \
-    poetry install --only=main --no-root
 
-CMD ["python", "test.py"]
+RUN poetry run black ./src
 
-#FROM base as final
-#
-#COPY test.py ./
-##COPY --from=builder /app/.venv ./.venv
-##COPY --from=builder /app/src .
-##COPY docker-entrypoint.sh .
-#
-#CMD ["python", "test.py"]
+EXPOSE 8000
+
+CMD ["poetry", "run", "python", "/app/src/main.py"]
