@@ -116,4 +116,4 @@ poetry run pytest
 ## Возможности улучшения
 
 - Создание pipeline для автоматизации CI/CD.
-- Создание infrasture layer при появлении доменной модели.
+- Создание infrastructure layer при появлении доменной модели.
