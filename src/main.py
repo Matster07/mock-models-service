@@ -12,5 +12,5 @@ if __name__ == "__main__":
         host="0.0.0.0",
         reload=False,
         log_config=logging_config,
-        access_log=False
+        access_log=False,
     )

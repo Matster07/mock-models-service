@@ -24,7 +24,7 @@ class ValidationRequestDto(BaseModel):
     path="/text/validate",
     response_model=ValidationResponseDto,
     tags=["Text Validation Controller"],
-    description="Endpoint для проверки строки при помощи заданной модели."
+    description="Endpoint для проверки строки при помощи заданной модели.",
 )
 async def apply(
     data: ValidationRequestDto,

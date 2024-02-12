@@ -32,8 +32,6 @@ ENV PYTHONPATH=/app/
 
 COPY src ./src
 
-RUN poetry run black ./src
-
 EXPOSE 8000
 
 CMD ["poetry", "run", "python", "/app/src/main.py"]
