@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
 from src.config import get_settings
-from src.usecase.validation_usecase import get_validation_use_case
-from src.usecase.validation_usecase_interface import ValidationUseCaseInterface
+from src.usecase.validation.validation_usecase import get_validation_use_case
+from src.usecase.validation.validation_usecase_interface import ValidationUseCaseInterface
 
 log = logging.getLogger()
 

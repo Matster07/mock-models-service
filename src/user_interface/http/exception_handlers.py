@@ -28,6 +28,10 @@ class ApiErrorResponse(BaseModel):
 async def validation_exception_handler(
     request: Request, exc: RequestValidationError
 ) -> JSONResponse:
+    """
+    Оборачиваем исключение валидации типов от Pydantic в дефолтную обертку ошибки.
+    """
+
     errors = [
         ApiError(type=error["type"], msg=error["msg"], input=str(error["input"]))
         for error in exc.errors()
@@ -40,6 +44,9 @@ async def validation_exception_handler(
 
 
 async def http_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:
+    """
+    Оборачиваем исключение любое HTTPException и его потомков в дефолтную обертку ошибки
+    """
     errors = [ApiError(msg=exc.detail)]
     content = jsonable_encoder(ApiErrorResponse(errors=errors))
     log.error(content)

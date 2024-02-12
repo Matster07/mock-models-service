@@ -6,6 +6,11 @@ FORMAT: str = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
 
 class BadDefaultFastApiLogNameFilter(Filter):
+    """
+    Фильтр для замены отображения источника логов от FastAPI,
+    поскольку у них не лучший нейминг.
+    """
+
     def filter(self, record: LogRecord) -> bool:
         if record.name == "uvicorn.error" or record.name == "uvicorn.access":
             record.name = "fastapi"
