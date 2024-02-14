@@ -18,7 +18,8 @@ class ModelUseCase(ModelUseCaseInterface):
             async with self.lock:
                 log.debug("Lock is acquired")
                 result = await self.__call_model(query=query)
-                log.debug("Lock is free")
+
+            log.debug("Lock is free")
         except Exception as exc:
             log.error("Error occurred while calling the model")
             raise ModelCallException(str(exc))
