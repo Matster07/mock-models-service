@@ -17,7 +17,6 @@ RUN pip install --upgrade pip \
     && pip install "poetry==$POETRY_VERSION"
 
 COPY ["pyproject.toml", "poetry.lock", "README.md", "./"]
-COPY .env /app/
 
 RUN poetry config virtualenvs.create true \
     && poetry install --only main

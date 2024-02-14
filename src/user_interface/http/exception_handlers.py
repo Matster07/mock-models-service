@@ -9,7 +9,7 @@ from starlette.responses import JSONResponse
 log = logging.getLogger()
 
 
-class ValidationException(HTTPException):
+class ModelCallException(HTTPException):
 
     def __init__(self, detail: str) -> None:
         super().__init__(status_code=400, detail=detail)

@@ -1,51 +1,51 @@
 import pytest
 
-from src.usecase.validation.validation_usecase import ValidationUseCase
-from src.user_interface.http.exception_handlers import ValidationException
+from src.usecase.models.model_usecase import ModelUseCase
+from src.user_interface.http.exception_handlers import ModelCallException
 
-validation_use_case = ValidationUseCase()
+model_use_case = ModelUseCase()
 
 
-def test_applied_model_must_return_true() -> None:
+async def test_calling_model_must_return_true() -> None:
     """
-    Тесты при проверке валидных данных, результат должен быть True.
-    """
-
-    assert validation_use_case.validate(data="string_to_validate") is True
-    assert validation_use_case.validate(data="another_string_to_validate") is True
-    assert validation_use_case.validate(data="2131") is True
-
-
-def test_empty_input_string_must_return_false() -> None:
-    """
-    Тест при проверке валидных данных, результат должен быть False.
+    Тесты при проверке валидных данных должен вернуться результат True.
     """
 
-    assert validation_use_case.validate(data="") is False
+    assert await model_use_case.execute(query="string_to_validate") is True
+    assert await model_use_case.execute(query="another_string_to_validate") is True
+    assert await model_use_case.execute(query="2131") is True
 
 
-def test_int_input() -> None:
+async def test_empty_input_query_must_return_false() -> None:
     """
-    Тесты на выбрасывание исключения при передаче int значения на валидацию.
+    Тесты при проверке валидных данных должен вернуться результат False.
     """
 
-    with pytest.raises(ValidationException):
-        validation_use_case.validate(data=312)
+    assert await model_use_case.execute(query="") is False
 
 
-def test_bool_input() -> None:
+async def test_int_input() -> None:
+    """
+    Тесты на выбрасывание исключения при передаче int значения модели.
+    """
+
+    with pytest.raises(ModelCallException):
+        await model_use_case.execute(query=312)
+
+
+async def test_bool_input() -> None:
     """
     Тесты на выбрасывание исключения при передаче bool значения.
     """
 
-    with pytest.raises(ValidationException):
-        validation_use_case.validate(data=False)
+    with pytest.raises(ModelCallException):
+        await model_use_case.execute(query=False)
 
 
-def test_none_input() -> None:
+async def test_none_input() -> None:
     """
     Тест на выбрасывание исключения при передаче пустого значения.
     """
 
-    with pytest.raises(ValidationException):
-        validation_use_case.validate(data=None)
+    with pytest.raises(ModelCallException):
+        await model_use_case.execute(query=None)

@@ -4,35 +4,36 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
 from src.config import get_settings
-from src.usecase.validation.validation_usecase import get_validation_use_case
-from src.usecase.validation.validation_usecase_interface import ValidationUseCaseInterface
+from src.usecase.models.model_usecase import get_model_use_case
+from src.usecase.models.model_usecase_interface import ModelUseCaseInterface
 
 log = logging.getLogger()
+audit = logging.getLogger("audit")
 
 router = APIRouter(prefix=get_settings().URL_PREFIX)
 
 
-class ValidationResponseDto(BaseModel):
+class ModelExecutionResponseDto(BaseModel):
     result: bool
 
 
-class ValidationRequestDto(BaseModel):
-    data: str
+class ModelExecutionRequestDto(BaseModel):
+    query: str
 
 
 @router.post(
-    path="/text/validate",
-    response_model=ValidationResponseDto,
-    tags=["Text Validation Controller"],
-    description="Endpoint для проверки строки при помощи заданной модели.",
+    path="/model/execute",
+    response_model=ModelExecutionResponseDto,
+    tags=["Model Executing Controller"],
+    description="Endpoint для выполнения запроса к модели.",
 )
 async def apply(
-    data: ValidationRequestDto,
-    use_case: ValidationUseCaseInterface = Depends(get_validation_use_case),
-) -> ValidationResponseDto:
-    log.debug(f"Received request to validate string: {data.data}", data.data)
+    data: ModelExecutionRequestDto,
+    use_case: ModelUseCaseInterface = Depends(get_model_use_case),
+) -> ModelExecutionResponseDto:
+    log.debug(f"Received query to call. Query: {data.query}")
 
-    result = use_case.validate(data=data.data)
-    log.info(f"Result of applying model to string: {data.data} - {result}")
+    result = await use_case.execute(query=data.query)
+    audit.info(f"Result of passing query {data.query} to model is {result}")
 
-    return ValidationResponseDto(result=result)
+    return ModelExecutionResponseDto(result=result)

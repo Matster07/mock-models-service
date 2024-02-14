@@ -11,7 +11,7 @@ def test_validation_route_for_int_input_type() -> None:
     Также проверяется, что обработчик ошибок отдает ошибку в нужном формате.
     """
 
-    response = client.post(url="/api/v1/text/validate", json={"data": 123})
+    response = client.post(url="/api/v1/model/execute", json={"query": 123})
     assert response.status_code == 422
     assert response.json() == {
         "errors": [
@@ -30,7 +30,7 @@ def test_validation_route_for_bool_input_type() -> None:
     Также проверяется, что обработчик ошибок отдает ошибку в нужном формате.
     """
 
-    response = client.post(url="/api/v1/text/validate", json={"data": False})
+    response = client.post(url="/api/v1/model/execute", json={"query": False})
     assert response.status_code == 422
     assert response.json() == {
         "errors": [
@@ -49,7 +49,7 @@ def test_validation_route_for_null_input_type() -> None:
     Также проверяется, что обработчик ошибок отдает ошибку в нужном формате.
     """
 
-    response = client.post(url="/api/v1/text/validate", json={"data": None})
+    response = client.post(url="/api/v1/model/execute", json={"query": None})
     assert response.status_code == 422
     assert response.json() == {
         "errors": [
@@ -68,7 +68,7 @@ def test_validation_route_for_empty_input() -> None:
     Также проверяется, что обработчик ошибок отдает ошибку в нужном формате.
     """
 
-    response = client.post(url="/api/v1/text/validate", json={})
+    response = client.post(url="/api/v1/model/execute", json={})
     assert response.status_code == 422
     assert response.json() == {
         "errors": [

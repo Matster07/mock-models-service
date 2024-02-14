@@ -1,3 +1,4 @@
+import os
 from logging import Filter, LogRecord
 
 from src.config import get_settings
@@ -7,8 +8,7 @@ FORMAT: str = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
 class BadDefaultFastApiLogNameFilter(Filter):
     """
-    Фильтр для замены отображения источника логов от FastAPI,
-    поскольку у них не лучший нейминг.
+    Фильтр подмены названия логов от FastAPI, т.к. у них не лучший нейминг.
     """
 
     def filter(self, record: LogRecord) -> bool:
@@ -36,6 +36,14 @@ logging_config: dict = {
             "filters": ["default.fastapi.log.name.filter"],
             "class": "logging.StreamHandler",
         },
+        "audit_handler": {
+            "formatter": "basic",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": os.path.abspath(os.getcwd()) + "/../logs/info.log",
+            "mode": "a",
+            "maxBytes": 1048576,
+            "backupCount": 10,
+        },
     },
     "root": {
         "handlers": ["console"],
@@ -50,6 +58,11 @@ logging_config: dict = {
         },
         "uvicorn.error": {
             "handlers": ["console"],
+            "level": get_settings().LOG_LEVEL,
+            "propagate": False,
+        },
+        "audit": {
+            "handlers": ["console", "audit_handler"],
             "level": get_settings().LOG_LEVEL,
             "propagate": False,
         },
